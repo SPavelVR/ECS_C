@@ -54,7 +54,7 @@ int ecs_creat_entity(ECSWorld_t* _world, ECSMask_t mask, va_list args)
     return 1;
 }
 
-int ecs_append_entity(ECSWorld_t* _world, size_t index, va_list args)
+int ecs_append_entity(ECSWorld_t* _world, ECSEntityId id, size_t index, va_list args)
 {
     if (WORLD_ENT(index).components == NULL || WORLD_ENT(index).entIds == NULL || WORLD_ENT(index).position == NULL) return 0;
 
@@ -86,9 +86,13 @@ int ecs_append_entity(ECSWorld_t* _world, size_t index, va_list args)
         memcpy( (char*) WORLD_ENT(index).components[pos] + WORLD_ENT(index).size * value.sizeComp, value.comp, value.sizeComp);
     } while (value.compId);
 
-    _world->entities.maxId++;
+    if (id == 0)
+    {
+        id = _world->entities.maxId + 1;
+        _world->entities.maxId++;
+    }
 
-    WORLD_ENT(index).entIds[WORLD_ENT(index).size] = _world->entities.maxId;
+    WORLD_ENT(index).entIds[WORLD_ENT(index).size] = id;
 
     WORLD_ENT(index).size++;
 
@@ -130,7 +134,7 @@ ECSEntityId ecs_init_entity(ECSWorld_t* _world, ...)
     {
         if (mask_equal(_world->entities.entities[i].mask, mask))
         {
-            if (ecs_append_entity(_world, i, factor))
+            if (ecs_append_entity(_world, 0, i, factor))
             {
                 mask_destroy(mask);
                 va_end(factor);
@@ -151,7 +155,7 @@ ECSEntityId ecs_init_entity(ECSWorld_t* _world, ...)
         return 0;
     }
 
-    if (ecs_append_entity(_world, _world->entities.size - 1, factor) == 0)
+    if (ecs_append_entity(_world, 0, _world->entities.size - 1, factor) == 0)
     {
         mask_destroy(mask);
         va_end(factor);
@@ -221,4 +225,74 @@ void* ecs_get_component_entity(ECSWorld_t* _world, ECSEntityId _entId, ECSCompon
             }
         }
     }
+}
+
+
+ECSEntityId ecs_inclusion_entity(ECSWorld_t* _world, ECSEntityId _entId, ...)
+{
+    if (_world == NULL || _entId == 0 || _entId > _world->entities.maxId) return 0;
+    
+    ECSEntity_t* entity = util_get_entity_for_id(_world, _entId);
+
+    if (entity != NULL) return 0;
+
+    va_list factor;
+    va_start(factor, _entId);
+
+    ECSMask_t mask = get_empty_mask();
+    ECSValue_t value;
+
+    do
+    {
+        value = va_arg(factor, ECSValue_t);
+
+        if (value.compId)
+        {
+            mask_xor(&mask, value.compId - 1);
+        }
+    } while (value.compId);
+
+    if (mask.count == 0)
+    {
+        va_end(factor);
+        mask_destroy(mask);
+        return 0;
+    }
+
+    va_start(factor, _entId);
+    
+
+    for (size_t i = 0; i < _world->entities.size; i++)
+    {
+        if (mask_equal(_world->entities.entities[i].mask, mask))
+        {
+            if (ecs_append_entity(_world, _entId, i, factor))
+            {
+                mask_destroy(mask);
+                va_end(factor);
+                return _entId;
+            }
+
+            mask_destroy(mask);
+            va_end(factor);
+            return 0;
+        }
+    }
+
+
+    if (ecs_creat_entity(_world, mask, factor) == 0)
+    {
+        mask_destroy(mask);
+        va_end(factor);
+        return 0;
+    }
+
+    if (ecs_append_entity(_world, _entId, _world->entities.size - 1, factor) == 0)
+    {
+        mask_destroy(mask);
+        va_end(factor);
+        return 0;
+    }
+
+    return _entId;
 }
