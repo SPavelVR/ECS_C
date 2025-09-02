@@ -2,22 +2,23 @@
  My implementation of the ECS concept in C
  
  example of working code:
- #include <stdio.h>
- #include <stdlib.h>
+ 
+    #include <stdio.h>
+    #include <stdlib.h>
 
- #define _USE_MATH_DEFINES
- #include <math.h>
+    #define _USE_MATH_DEFINES
+    #include <math.h>
 
- // connect the library ECS_C
- #include <ecs.h>
+    // connect the library ECS_C
+    #include <ecs.h>
 
- typedef struct 
- {
-     float x, y;
- } Position, Vertex, Target;
+    typedef struct 
+    {
+        float x, y;
+    } Position, Vertex, Target;
 
- ECS_RETURN init_entities_sys(ECSIter_t* iter)
- {
+    ECS_RETURN init_entities_sys(ECSIter_t* iter)
+    {
     ECS_COMPONENT(iter->_world, Position);
     ECS_COMPONENT(iter->_world, Vertex);
     ECS_COMPONENT(iter->_world, Target);
@@ -47,13 +48,13 @@
             );
 
     return ECS_RETURN_CONTINUE;
-}
+    }
 
-ECS_RETURN init_vertex_sys(ECSIter_t* iter)
-{
-    Position* pos = ecs_field(iter, Position, 0);
-    Vertex* vertex = ecs_field(iter, Vertex, 1);
-    Target* targs = ecs_field(iter, Target, 2);
+    ECS_RETURN init_vertex_sys(ECSIter_t* iter)
+    {
+       Position* pos = ecs_field(iter, Position, 0);
+       Vertex* vertex = ecs_field(iter, Vertex, 1);
+       Target* targs = ecs_field(iter, Target, 2);
     
     float sum;
 
@@ -69,10 +70,10 @@ ECS_RETURN init_vertex_sys(ECSIter_t* iter)
     }
     
     return ECS_RETURN_CONTINUE;
-}
+    }
 
-ECS_RETURN folder_target(ECSIter_t* iter)
-{
+    ECS_RETURN folder_target(ECSIter_t* iter)
+    {
     Position* pos = ecs_field(iter, Position, 0);
     Vertex* vertex = ecs_field(iter, Vertex, 1);
 
@@ -83,10 +84,10 @@ ECS_RETURN folder_target(ECSIter_t* iter)
     }
 
     return ECS_RETURN_CONTINUE;
-}
+    }
 
-ECS_RETURN check_target(ECSIter_t* iter)
-{
+    ECS_RETURN check_target(ECSIter_t* iter)
+    {
     Position* pos = ecs_field(iter, Position, 0);
     Target* targ = ecs_field(iter, Target, 1);
 
@@ -99,10 +100,10 @@ ECS_RETURN check_target(ECSIter_t* iter)
     }
 
     return ECS_RETURN_CONTINUE;
-}
+    }
 
-int main()
-{
+    int main()
+    {
     printf("Start ECS\n");
 
     ECSWorld_t* world = init_world();
@@ -131,4 +132,4 @@ int main()
 
     printf("end of program!\n");
     return 0;
-}
+    }
