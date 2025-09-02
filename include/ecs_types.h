@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-/*      __ECS_ID_TYPE - базовый тип для всех Id в ECS*/
+/*      __ECS_ID_TYPE - базовый тип для всех Id в ECS */
 #ifndef __ECS_ID_TYPE
 #define __ECS_ID_TYPE uint32_t
 #endif

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 4.0.0 FATAL_ERROR)
 
-project(ECS_C VERSION 0.1 LANGUAGES C)
+project(ECS_C VERSION 0.2 LANGUAGES C)
 
 
 set(FILES   src/components.c

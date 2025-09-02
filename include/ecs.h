@@ -37,6 +37,12 @@ extern "C" {
 #define ECS_DESTROY_ENTITY(_world, _entity_id)  \
     ecs_destroy_entity(_world, _entity_id)
 
+#define ECS_GET_COMPONENT_ENTITY(_world, _entId, T) \
+    (T*) ecs_get_component_entity(_world, _entId, ecs_id(T), sizeof(T))
+
+#define ECS_INCLUSION_ENTITY(_world, _entId, ...)   \
+    ecs_inclusion_entity(_worldId, _entId, __VA_ARGS__, (ECSValue_t) {0, 0, NULL})
+
 #define ecs_field(__iter, T, _disp)   \
     (T*) ecs_get_for_iter(__iter, _disp)
 

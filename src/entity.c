@@ -194,3 +194,31 @@ int ecs_destroy_entity(ECSWorld_t* _world, ECSEntityId entId)
     entity->size--;
     return 1;
 }
+
+void* ecs_get_component_entity(ECSWorld_t* _world, ECSEntityId _entId, ECSComponentId compId, size_t sizeComp)
+{
+    if (_world == NULL || _entId == 0 || compId == 0 || _entId > _world->entities.maxId) return NULL;
+
+    size_t pos = 0;
+    void* ptr = NULL;
+
+    for (size_t i = 0; i < _world->entities.size; i++)
+    {
+        if (mask_get(WORLD_ENT(i).mask, compId - 1))
+        {
+            for (size_t j = 0; j < WORLD_ENT(i).size; j++)
+            {
+                if (WORLD_ENT(i).entIds[j] == _entId)
+                {
+                    pos = util_get_index(WORLD_ENT(i).position, WORLD_ENT(i).mask.count, compId);
+
+                    if (pos == WORLD_ENT(i).mask.count) return NULL;
+
+                    ptr = WORLD_ENT(i).components[pos];
+
+                    return ((char*) ptr + j * sizeComp);
+                }
+            }
+        }
+    }
+}
