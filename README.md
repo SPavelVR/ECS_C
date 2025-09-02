@@ -1,23 +1,23 @@
 # ECS_C
  My implementation of the ECS concept in C
  
-example of working code:
-#include <stdio.h>
-#include <stdlib.h>
+ example of working code:
+ #include <stdio.h>
+ #include <stdlib.h>
 
-#define _USE_MATH_DEFINES
-#include <math.h>
+ #define _USE_MATH_DEFINES
+ #include <math.h>
 
-// connect the library ECS_C
-#include <ecs.h>
+ // connect the library ECS_C
+ #include <ecs.h>
 
-typedef struct 
-{
-    float x, y;
-} Position, Vertex, Target;
+ typedef struct 
+ {
+     float x, y;
+ } Position, Vertex, Target;
 
-ECS_RETURN init_entities_sys(ECSIter_t* iter)
-{
+ ECS_RETURN init_entities_sys(ECSIter_t* iter)
+ {
     ECS_COMPONENT(iter->_world, Position);
     ECS_COMPONENT(iter->_world, Vertex);
     ECS_COMPONENT(iter->_world, Target);
