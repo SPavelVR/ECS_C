@@ -45,7 +45,7 @@ int ecs_creat_entity(ECSWorld_t* _world, ECSMask_t mask, va_list args)
         if (value.compId == 0) continue;
 
         WORLD_ENT(index).position[pass] = value.compId;
-        WORLD_ENT(index).components[pass] = calloc(8, value.sizeComp);
+        WORLD_ENT(index).components[pass] = calloc(WORLD_ENT(index).capacity, value.sizeComp);
         pass++;
     } while (value.compId);
 
@@ -134,14 +134,14 @@ ECSEntityId ecs_init_entity(ECSWorld_t* _world, ...)
     {
         if (mask_equal(_world->entities.entities[i].mask, mask))
         {
+            mask_destroy(mask);
+            
             if (ecs_append_entity(_world, 0, i, factor))
             {
-                mask_destroy(mask);
                 va_end(factor);
                 return _world->entities.maxId;
             }
 
-            mask_destroy(mask);
             va_end(factor);
             return 0;
         }
@@ -266,14 +266,14 @@ ECSEntityId ecs_inclusion_entity(ECSWorld_t* _world, ECSEntityId _entId, ...)
     {
         if (mask_equal(_world->entities.entities[i].mask, mask))
         {
+            mask_destroy(mask);
+
             if (ecs_append_entity(_world, _entId, i, factor))
             {
-                mask_destroy(mask);
                 va_end(factor);
                 return _entId;
             }
 
-            mask_destroy(mask);
             va_end(factor);
             return 0;
         }

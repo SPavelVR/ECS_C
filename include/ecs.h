@@ -41,7 +41,7 @@ extern "C" {
     (T*) ecs_get_component_entity(_world, _entId, ecs_id(T), sizeof(T))
 
 #define ECS_INCLUSION_ENTITY(_world, _entId, ...)   \
-    ecs_inclusion_entity(_worldId, _entId, __VA_ARGS__, (ECSValue_t) {0, 0, NULL})
+    ecs_inclusion_entity(_world, _entId, __VA_ARGS__, (ECSValue_t) {0, 0, NULL})
 
 #define ecs_field(__iter, T, _disp)   \
     (T*) ecs_get_for_iter(__iter, _disp)
