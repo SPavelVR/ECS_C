@@ -166,17 +166,20 @@ ECSEntityId ecs_init_entity(ECSWorld_t* _world, ...)
 }
 
 
-int ecs_destroy_entity_up(ECSWorld_t* _world, ECSEntityId entId, ECSEntity_t* entity)
+int ecs_destroy_entity_up(ECSWorld_t* _world, ECSEntityId entId, ECSEntity_t* entity, size_t pos)
 {
     if (_world == NULL || entId == 0) return 0;
 
     if (entity == NULL) return ecs_destroy_entity(_world, entId);
 
-    size_t size = util_get_index((ECSComponentId*) entity->entIds, entity->size, (ECSComponentId) entId);
+    if (entity->size <= pos || entity->entIds[pos] != entId)
+    {
+        pos = util_get_index(entity->entIds, entity->size, entId);
+    }
 
-    if (size == entity->size) return ecs_destroy_entity(_world, entId);
+    if (pos >= entity->size) return ecs_destroy_entity(_world, entId);
 
-    else if (size + 1 == entity->size)
+    else if (pos + 1 == entity->size)
     {
         entity->size--;
         return 1;
@@ -190,10 +193,10 @@ int ecs_destroy_entity_up(ECSWorld_t* _world, ECSEntityId entId, ECSEntity_t* en
 
         if (comp == NULL) continue;
 
-        memcpy((char*) entity->components[i] + size * comp->sizeComp, (char*) entity->components[i] + (entity->size - 1) * comp->sizeComp, comp->sizeComp);
+        memcpy((char*) entity->components[i] + pos * comp->sizeComp, (char*) entity->components[i] + (entity->size - 1) * comp->sizeComp, comp->sizeComp);
     }
 
-    entity->entIds[size] = entity->entIds[entity->size - 1];
+    entity->entIds[pos] = entity->entIds[entity->size - 1];
 
     entity->size--;
     return 1;

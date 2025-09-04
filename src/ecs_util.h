@@ -5,7 +5,7 @@
 
 #include "ecs.h"
 
-size_t util_get_index(ECSComponentId* position, size_t size, ECSComponentId id);
+size_t util_get_index(ECSId* position, size_t size, ECSId id);
 
 
 ECSEntity_t* util_get_entity_for_id(ECSWorld_t* world, ECSEntityId entId);

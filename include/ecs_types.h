@@ -93,8 +93,7 @@ struct ECSComponents_t
 struct ECSIter_t
 {
     ECSComponentId* compIds;
-    ECSEntity_t entity;
-    size_t size;
+    ECSEntity_t* entity;
     ECSWorld_t* _world;
 };
 

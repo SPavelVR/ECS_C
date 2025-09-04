@@ -3,7 +3,7 @@
 #include "ecs_util.h"
 
 
-size_t util_get_index(ECSComponentId* position, size_t size, ECSComponentId id)
+size_t util_get_index(ECSId* position, size_t size, ECSId id)
 {
     if (position == NULL) return size;
 

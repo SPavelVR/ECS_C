@@ -54,8 +54,7 @@ ECS_RETURN ecs_run_system(ECSWorld_t* _world, uint8_t typeSystem, uint8_t emptyS
             if (mask_inside(entities->entities[j].mask, sys.mask))
             {
                 
-                iter.entity = entities->entities[j];
-                iter.size = iter.entity.size;
+                iter.entity = entities->entities + j;
                 res = sys.system(&iter);
 
                 if (res == ECS_RETURN_BREAK)
