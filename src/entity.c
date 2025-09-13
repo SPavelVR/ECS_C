@@ -166,7 +166,7 @@ ECSEntityId ecs_init_entity(ECSWorld_t* _world, ...)
 }
 
 
-int ecs_destroy_entity_up(ECSWorld_t* _world, ECSEntityId entId, ECSEntity_t* entity, size_t pos)
+int ecs_destroy_entity_with_ep(ECSWorld_t* _world, ECSEntityId entId, ECSEntity_t* entity, size_t pos)
 {
     if (_world == NULL || entId == 0) return 0;
 

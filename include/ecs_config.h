@@ -11,6 +11,7 @@ ECSEntityId ecs_init_entity(ECSWorld_t* _world, ...);
 int ecs_destroy_entity(ECSWorld_t* _world, ECSEntityId entId);
 void* ecs_get_component_entity(ECSWorld_t* _world, ECSEntityId _entId, ECSComponentId compId, size_t sizeComp);
 ECSEntityId ecs_inclusion_entity(ECSWorld_t* _world, ECSEntityId _entId, ...);
+int ecs_destroy_entity_with_ep(ECSWorld_t* _world, ECSEntityId entId, ECSEntity_t* entity, size_t pos);
 
 int ecs_init_system(ECSWorld_t* _world, ECSSystem_f system, uint8_t typeSystem, ...);
 

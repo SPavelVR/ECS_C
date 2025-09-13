@@ -46,6 +46,9 @@ extern "C" {
 #define ecs_field(__iter, T, _disp)   \
     (T*) ecs_get_for_iter(__iter, _disp)
 
+#define ECS_ITER_DESTROY_ENTITY(__iter, _index) \
+    ((__iter->entity->size <= _index) ? 0 : ecs_destroy_entity_with_ep(__iter->_world, __iter->entity->entIds[_index], __iter->entity, _index))
+
 
 #define ECS_SYSTEM(__world, __system, __type_system, ...)   \
     ecs_init_system(__world, __system, __type_system, __VA_ARGS__, 0)
